@@ -47,13 +47,13 @@ function calculateFullMap(event) {
     //нарисовать нагн.области
     drawFullMap(context_result_wells, inj_voronoy_areas, inj_voronoy_centers, false, true)
     //сделать канвас притемненным
-    context_result_wells.fillStyle= "rgba(157,153,153,0.34)"
-    context_result_wells.fillRect(0,0, width, height);
+    context_result_wells.fillStyle = "rgba(157,153,153,0.34)"
+    context_result_wells.fillRect(0, 0, width, height);
 }
 
 
 button.onclick = function (event) {
-    if(inj_torf_polygons === null || inj_torf_polygons.length === 0) {
+    if (inj_torf_polygons === null || inj_torf_polygons.length === 0) {
         return;
     }
     //создать итоговый result_dataset
@@ -65,31 +65,31 @@ button.onclick = function (event) {
     const max_min_X_Inj_Well = arrayMinMax(result_dataset.map(o => o.X_Inj_Well))
     const max_X_Inj_Well = max_min_X_Inj_Well[1];
     const min_X_Inj_Well = max_min_X_Inj_Well[0];
-    const dif_X_Inj_Well = max_X_Inj_Well-min_X_Inj_Well;
+    const dif_X_Inj_Well = max_X_Inj_Well - min_X_Inj_Well;
 
     const max_min_X_Prod_Well = arrayMinMax(result_dataset.map(o => o.X_Prod_Well))
     const max_X_Prod_Well = max_min_X_Prod_Well[1];
     const min_X_Prod_Well = max_min_X_Prod_Well[0];
-    const dif_X_Prod_Well = max_X_Prod_Well-min_X_Prod_Well;
+    const dif_X_Prod_Well = max_X_Prod_Well - min_X_Prod_Well;
 
     const max_min_Y_Inj_Well = arrayMinMax(result_dataset.map(o => o.Y_Inj_Well))
     const max_Y_Inj_Well = max_min_Y_Inj_Well[1];
     const min_Y_Inj_Well = max_min_Y_Inj_Well[0];
-    const dif_Y_Inj_Well = max_Y_Inj_Well-min_Y_Inj_Well;
+    const dif_Y_Inj_Well = max_Y_Inj_Well - min_Y_Inj_Well;
 
     const max_min_Y_Prod_Well = arrayMinMax(result_dataset.map(o => o.Y_Prod_Well))
     const max_Y_Prod_Well = max_min_Y_Prod_Well[1];
     const min_Y_Prod_Well = max_min_Y_Prod_Well[0];
-    const dif_Y_Prod_Well = max_Y_Prod_Well-min_Y_Prod_Well;
+    const dif_Y_Prod_Well = max_Y_Prod_Well - min_Y_Prod_Well;
 
     result_dataset.forEach(function (value, index) {
         let this_value = {
             "N_Inj_Well": value.N_Inj_Well,
-            "X_Inj_Well": (value.X_Inj_Well-min_X_Inj_Well)/dif_X_Inj_Well,
-            "Y_Inj_Well": (value.Y_Inj_Well-min_Y_Inj_Well)/dif_Y_Inj_Well,
+            "X_Inj_Well": (value.X_Inj_Well - min_X_Inj_Well) / dif_X_Inj_Well,
+            "Y_Inj_Well": (value.Y_Inj_Well - min_Y_Inj_Well) / dif_Y_Inj_Well,
             "N_Prod_Well": value.N_Prod_Well,
-            "X_Prod_Well": (value.X_Prod_Well-min_X_Prod_Well)/dif_X_Prod_Well,
-            "Y_Prod_Well": (value.Y_Prod_Well-min_Y_Prod_Well)/dif_Y_Prod_Well,
+            "X_Prod_Well": (value.X_Prod_Well - min_X_Prod_Well) / dif_X_Prod_Well,
+            "Y_Prod_Well": (value.Y_Prod_Well - min_Y_Prod_Well) / dif_Y_Prod_Well,
             "connect": value.connect
         }
         normalized_dataset[index] = this_value;
@@ -114,7 +114,7 @@ button.onclick = function (event) {
 
     let wells_norm_data = [["N_Inj_Well", "X_Inj_Well", "Y_Inj_Well", "N_Prod_Well", "X_Prod_Well", "Y_Prod_Well", "connect"]];
     normalized_dataset.forEach(function (value, index) {
-        wells_norm_data[index+1]=[value.N_Inj_Well, value.X_Inj_Well, value.Y_Inj_Well, value.N_Prod_Well, value.X_Prod_Well, value.Y_Prod_Well, value.connect];
+        wells_norm_data[index + 1] = [value.N_Inj_Well, value.X_Inj_Well, value.Y_Inj_Well, value.N_Prod_Well, value.X_Prod_Well, value.Y_Prod_Well, value.connect];
     });
     let wells_norm_data_sheet = XLSX.utils.aoa_to_sheet(wells_norm_data);
     excel_file.Sheets["wells_norm"] = wells_norm_data_sheet;
@@ -139,8 +139,8 @@ button.onclick = function (event) {
     // let wells_based_data_sheet = XLSX.utils.aoa_to_sheet(wells_based_data);
     // excel_file.Sheets["wells_based"] = wells_based_data_sheet;
 
-    let excel_file_bytes = XLSX.write(excel_file, {bookType:"xlsx", type: "binary"});
-    saveAs(new Blob([s2ab(excel_file_bytes)], {type:"application/octet-stream"}), 'well_dataset.xlsx');
+    let excel_file_bytes = XLSX.write(excel_file, {bookType: "xlsx", type: "binary"});
+    saveAs(new Blob([s2ab(excel_file_bytes)], {type: "application/octet-stream"}), 'well_dataset.xlsx');
 
 //     // Создаем Blob из бинарных данных Excel файла
 //     var blob = new Blob([s2ab(excel_file_bytes)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -164,17 +164,32 @@ button.onclick = function (event) {
 //         .catch(error => {
 //             console.error('There has been a problem with your fetch operation:', error);
 //         });
-        //   saveAs(new Blob([s2ab(excel_file_bytes)], {type:"application/octet-stream"}), 'well_dataset.xlsx');
+    //   saveAs(new Blob([s2ab(excel_file_bytes)], {type:"application/octet-stream"}), 'well_dataset.xlsx');
 }
 
 function excelDataToBlob(excelData) {
     const arrayBuffer = new Uint8Array(excelData).buffer;
-    return new Blob([arrayBuffer], { type: 'application/octet-stream' });
+    return new Blob([arrayBuffer], {type: 'application/octet-stream'});
 }
 
 
 // Функция для обработки загрузки файла
 function handleFileUpload(event) {
+    all_voronoy_centers = [];
+    all_voronoy_areas = [];
+    //Добывающие скважины
+    prod_voronoy_centers = [];
+    prod_voronoy_areas = [];
+    prod_torf_polygons = [];
+//Нагнетательные скважины
+    inj_voronoy_centers = [];
+    inj_voronoy_areas = [];
+    inj_torf_polygons = [];
+    result_dataset = [];
+    normalized_dataset = [];
+    count = 0;
+    dataList = [];
+
     const file = event.target.files[0];
     // Проверяем, что файл с расширением xlsx
     if (file && file.name.endsWith('.xlsx')) {
@@ -215,37 +230,37 @@ function handleFileUpload(event) {
 var scaleFactorProd = 1.0;
 var scaleFactorInj = 1.0;
 var scaleFactorResult = 1.0;
-$('.zoomInProd').click(function() {
+$('.zoomInProd').click(function () {
     scaleFactorProd += 0.1;
     applyScale(context_prod_wells, scaleFactorProd);
 });
 
-$('.zoomOutProd').click(function() {
+$('.zoomOutProd').click(function () {
     if (scaleFactorProd > 1.0) {
         scaleFactorProd -= 0.1;
         applyScale(context_prod_wells, scaleFactorProd);
     }
 });
 
-$('.zoomInInj').click(function() {
+$('.zoomInInj').click(function () {
     scaleFactorInj += 0.1;
     applyScale(context_inj_wells, scaleFactorInj);
 });
 
-$('.zoomOutInj').click(function() {
-    if (scaleFactorInj > 0.1) {
+$('.zoomOutInj').click(function () {
+    if (scaleFactorInj > 1.0) {
         scaleFactorInj -= 0.1;
         applyScale(context_inj_wells, scaleFactorInj);
     }
 });
 
-$('.zoomInResult').click(function() {
+$('.zoomInResult').click(function () {
     scaleFactorResult += 0.1;
     applyScale(context_result_wells, scaleFactorResult);
 });
 
-$('.zoomOutResult').click(function() {
-    if (scaleFactorResult > 0.1) {
+$('.zoomOutResult').click(function () {
+    if (scaleFactorResult > 1.0) {
         scaleFactorResult -= 0.1;
         applyScale(context_result_wells, scaleFactorResult);
     }
@@ -262,13 +277,13 @@ var dragging = false;
 var lastX;
 var lastY;
 
-$('#prod_wells, #inj_wells, #result_wells').mousedown(function(e) {
+$('#prod_wells, #inj_wells, #result_wells').mousedown(function (e) {
     dragging = true;
     lastX = e.offsetX;
     lastY = e.offsetY;
 });
 
-$('#prod_wells, #inj_wells, #result_wells').mousemove(function(e) {
+$('#prod_wells, #inj_wells, #result_wells').mousemove(function (e) {
     let scaleFactor;
     switch ($(this)[0]) {
         case canvas_inj_wells:
@@ -317,21 +332,21 @@ $('#prod_wells, #inj_wells, #result_wells').mousemove(function(e) {
     }
 });
 
-$(document).mouseup(function() {
+$(document).mouseup(function () {
     dragging = false;
 });
 
 function drawStuff(ctx) {
-    if(ctx !== null) {
-        if(ctx === context_prod_wells) {
+    if (ctx !== null) {
+        if (ctx === context_prod_wells) {
             calculateProdMap();
             return;
         }
-        if(ctx === context_inj_wells) {
+        if (ctx === context_inj_wells) {
             calculateInjMap();
             return;
         }
-        if(ctx === context_result_wells) {
+        if (ctx === context_result_wells) {
             calculateFullMap();
             return;
         }
@@ -356,7 +371,7 @@ function calculateProdMap() {
 
     //заполнить список торф-многоугольников ДС
     all_voronoy_areas.forEach(function (area, index) {
-        if(area.point.name.includes("D")) {
+        if (area.point.name.includes("D")) {
             createTorfPolygons(area, prod_torf_polygons);
         }
     });
@@ -400,11 +415,11 @@ function findIntersection(inj_polygon) {
     for (let i = 0; i < prod_torf_polygons.length; i++) {
         let intersection = turf.intersect(inj_polygon, prod_torf_polygons[i]);
         let fully_contain = turf.booleanWithin(prod_torf_polygons[i], inj_polygon)
-        if(intersection) {
-            if(!fully_contain) {
+        if (intersection) {
+            if (!fully_contain) {
                 let prod_polygon_area = calculateArea(prod_torf_polygons[i].geometry.coordinates[0]);
                 let crossed_area = calculateArea(intersection.geometry.coordinates[0]);
-                if(isProperIntersection(prod_polygon_area, crossed_area)) {
+                if (isProperIntersection(prod_polygon_area, crossed_area)) {
                     result_dataset[count] = createDatasetRow(prod_torf_polygons[i].point, inj_polygon.point, true);
                 } else {
                     result_dataset[count] = createDatasetRow(prod_torf_polygons[i].point, inj_polygon.point, false);
@@ -413,7 +428,7 @@ function findIntersection(inj_polygon) {
                 result_dataset[count] = createDatasetRow(prod_torf_polygons[i].point, inj_polygon.point, true);
             }
         } else {
-            if(fully_contain) {
+            if (fully_contain) {
                 result_dataset[count] = createDatasetRow(prod_torf_polygons[i].point, inj_polygon.point, true);
             } else {
                 result_dataset[count] = createDatasetRow(prod_torf_polygons[i].point, inj_polygon.point, false);
@@ -438,7 +453,7 @@ function createDatasetRow(prod_point, inj_point, connect) {
 
 //Является ли пересечение полноценным с учетом КТС.
 function isProperIntersection(polygon_area, crossed_area) {
-    let minimum_area = (polygon_area/100) * connect_coefficient
+    let minimum_area = (polygon_area / 100) * connect_coefficient
     return crossed_area >= minimum_area;
 }
 
@@ -478,13 +493,13 @@ function createTorfPolygons(area, polygons) {
 //Создание карт областей добывающих или нагнетательных скважин
 function drawFullMap(context, areas, voronoy_centers, need_circle, needTriangle, based_color) {
     //нарисовать вписанные окружности
-    if(need_circle) {
+    if (need_circle) {
         context.clearRect(0, 0, width, height);
         context.beginPath();
         areas.forEach(function (cell) {
             context.beginPath();
             drawPolygonIncircle(cell, -2.5, context);
-            if(cell.point.name.includes("D")) {
+            if (cell.point.name.includes("D")) {
                 context.fillStyle = "rgba(142,207,248,0.48)";
             } else {
                 context.fillStyle = "rgba(248,142,142,0.48)";
@@ -499,10 +514,10 @@ function drawFullMap(context, areas, voronoy_centers, need_circle, needTriangle,
         context.beginPath();
         drawPolygon(cell, context);
         context.lineWidth = 1;
-        if(based_color) {
+        if (based_color) {
             context.strokeStyle = based_color;
         } else {
-            if(cell.point.name.includes("D")) {
+            if (cell.point.name.includes("D")) {
                 context.strokeStyle = "rgb(0,12,245)";
             } else {
                 context.strokeStyle = "rgb(245,0,0)";
@@ -514,7 +529,7 @@ function drawFullMap(context, areas, voronoy_centers, need_circle, needTriangle,
 
     //нарисовать точки или треугольники
     voronoy_centers.forEach(function (particle) {
-        if(particle.name.includes("D")) {
+        if (particle.name.includes("D")) {
             context.beginPath();
             drawPoint(particle, context);
             context.fillStyle = "rgb(0,12,245)";
@@ -532,7 +547,7 @@ function drawFullMap(context, areas, voronoy_centers, need_circle, needTriangle,
     //нарисовать имена
     voronoy_centers.forEach(function (particle) {
         context.beginPath();
-        if(particle.name.includes("D")) {
+        if (particle.name.includes("D")) {
             drawName(particle, context, "rgb(0,12,245)");
         } else {
             drawName(particle, context, "rgb(245,0,0)");
@@ -547,6 +562,7 @@ function createVoronoyAreaCentersInj(areas) {
     function getKey(obj) {
         return obj["номер нагнетательной скважины"] + "_" + obj["Условная координата Х наг.скв."] + "_" + obj["Условная координата У наг.скв."];
     }
+
     // Создаем объект Set для хранения уникальных ключей
     const uniqueKeys = new Set();
 
@@ -586,6 +602,7 @@ function createVoronoyAreaCentersProd(areas) {
     function getKey(obj) {
         return obj["Номер добывающей скважины"] + "_" + obj["Условная координата Х доб.скв."] + "_" + obj["Условная координата У доб.скв."];
     }
+
     // Создаем объект Set для хранения уникальных ключей
     const uniqueKeys = new Set();
 
@@ -611,7 +628,7 @@ function createVoronoyAreaCentersProd(areas) {
                 vy: 0
             };
     }
-     particles = particles.filter(item => {
+    particles = particles.filter(item => {
         if (isNaN(item[0]) || isNaN(item[1])) {
             return false;
         }
